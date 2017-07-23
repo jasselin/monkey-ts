@@ -1,0 +1,27 @@
+{
+  "name": "monkey-ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "hello.js",
+  "dependencies": {
+    "chai": "^4.1.0",
+    "ts-node": "^3.2.1"
+  },
+  "devDependencies": {
+    "mocha": "^3.4.2"
+  },
+  "scripts": {
+    "pretest": "tsc",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jasselin/monkey-ts.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jasselin/monkey-ts/issues"
+  },
+  "homepage": "https://github.com/jasselin/monkey-ts#readme"
+}
