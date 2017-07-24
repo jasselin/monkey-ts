@@ -28,3 +28,12 @@ export enum TokenType {
   FUNCTION = "FUNCTION",
   LET = "LET"
 }
+
+var keywords = {
+  "fn": TokenType.FUNCTION,
+  "let": TokenType.LET
+}
+
+export function lookupIdent(ident: string) : TokenType {
+  return keywords[ident] || TokenType.IDENT;
+}

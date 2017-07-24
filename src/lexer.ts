@@ -1,4 +1,4 @@
-import { TokenType, Token } from "./Token";
+import { TokenType, Token, lookupIdent } from "./Token";
 
 function newToken(tokenType: TokenType, literal: string): Token {
     return { Type: tokenType, Literal: literal };
@@ -31,12 +31,24 @@ export default class Lexer {
     NextToken(): Token {
         let tok: Token;
 
+        this.skipWhitespace();
+
         var tokenType = tokenMap[this.ch];
         if (tokenType)
             tok = newToken(tokenType, this.ch);
-
-        if (this.ch == "")
+        else if (this.ch == "")
             tok = newToken(TokenType.EOF, this.ch)
+        else if (this.isLetter(this.ch)) {
+            let literal = this.readType(this.isLetter);
+            tok = newToken(lookupIdent(literal), literal);
+            return tok;
+        }
+        else if (this.isDigit(this.ch)) {
+            tok = newToken(TokenType.INT, this.readType(this.isDigit));
+            return tok;
+        }
+        else
+            tok = newToken(TokenType.ILLEGAL, this.ch);
 
         this.readChar();
         return tok;
@@ -50,5 +62,26 @@ export default class Lexer {
 
         this.position = this.readPosition;
         this.readPosition += 1;
+    }
+
+    private skipWhitespace(): void {
+        while (this.ch == " " || this.ch == "\t" || this.ch == "\n" || this.ch == "\r") {
+            this.readChar();
+        }
+    }
+
+    private isLetter(ch: string): boolean {
+        return "a" <= ch && ch <= "z" || "A" <= ch && ch <= "Z" || ch == "_";
+    }
+
+    private readType(comparisonFunction: Function): string {
+        let position = this.position;
+        while (comparisonFunction(this.ch))
+            this.readChar();
+        return this.input.substr(position, this.position - position);
+    }
+
+    private isDigit(ch: string): boolean {
+        return "0" <= ch && ch <= "9";
     }
 }
