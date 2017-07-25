@@ -11,8 +11,14 @@ let tokenMap = {
     ")": TokenType.RPAREN,
     ",": TokenType.COMMA,
     "+": TokenType.PLUS,
+    "-": TokenType.MINUS,
+    "*": TokenType.ASTERISK,
+    "/": TokenType.SLASH,
     "{": TokenType.LBRACE,
-    "}": TokenType.RBRACE
+    "}": TokenType.RBRACE,
+    "!": TokenType.BANG,
+    "<": TokenType.LT,
+    ">": TokenType.GT
 }
 
 export default class Lexer {
@@ -32,6 +38,18 @@ export default class Lexer {
         let tok: Token;
 
         this.skipWhitespace();
+
+        if (this.peekChar() == "=") {
+            if (this.ch == "=")
+                tok = newToken(TokenType.EQ, "==")
+            else if (this.ch == "!")
+                tok = newToken(TokenType.NOT_EQ, "!=")
+            if (tok) {
+                this.readChar();
+                this.readChar();
+                return tok;
+            }
+        }
 
         var tokenType = tokenMap[this.ch];
         if (tokenType)
@@ -64,6 +82,10 @@ export default class Lexer {
         this.readPosition += 1;
     }
 
+    private peekChar(): string {
+        return this.readPosition >= this.input.length ? "" : this.input[this.readPosition];
+    }
+
     private skipWhitespace(): void {
         while (this.ch == " " || this.ch == "\t" || this.ch == "\n" || this.ch == "\r") {
             this.readChar();
@@ -74,9 +96,9 @@ export default class Lexer {
         return "a" <= ch && ch <= "z" || "A" <= ch && ch <= "Z" || ch == "_";
     }
 
-    private readType(comparisonFunction: Function): string {
+    private readType(typeFn: Function): string {
         let position = this.position;
-        while (comparisonFunction(this.ch))
+        while (typeFn(this.ch))
             this.readChar();
         return this.input.substr(position, this.position - position);
     }
