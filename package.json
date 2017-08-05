@@ -2,12 +2,14 @@
   "name": "monkey-ts",
   "version": "1.0.0",
   "description": "",
-  "main": "hello.js",
+  "main": "main.js",
   "dependencies": {
     "chai": "^4.1.0",
     "ts-node": "^3.2.1"
   },
   "devDependencies": {
+    "@types/mocha": "^2.2.41",
+    "@types/node": "^8.0.16",
     "mocha": "^3.4.2"
   },
   "scripts": {

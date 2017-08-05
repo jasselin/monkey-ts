@@ -54,7 +54,7 @@ export default class Lexer {
         var tokenType = tokenMap[this.ch];
         if (tokenType)
             tok = newToken(tokenType, this.ch);
-        else if (this.ch == "")
+        else if (this.ch == '\0')
             tok = newToken(TokenType.EOF, this.ch)
         else if (this.isLetter(this.ch)) {
             let literal = this.readType(this.isLetter);
@@ -74,7 +74,7 @@ export default class Lexer {
 
     private readChar(): void {
         if (this.readPosition >= this.input.length)
-            this.ch = "";
+            this.ch = '\0';
         else
             this.ch = this.input[this.readPosition];
 
